@@ -7,6 +7,12 @@ export function TodoFilter({ filterBy, onSetFilter }) {
     const [filterByToEdit, setFilterByToEdit] = useState({...filterBy})
     onSetFilter = useRef(utilService.debounce(onSetFilter)).current
 
+    const options = [
+        { value: 'all', label: 'All' },
+        { value: 'active', label: 'Active' },
+        { value: 'done', label: 'Done' }
+      ];
+
     useEffect(() => {
         // Notify parent
         onSetFilter(filterByToEdit)
@@ -26,9 +32,13 @@ export function TodoFilter({ filterBy, onSetFilter }) {
                 value = target.checked
                 break
 
+            case 'select-one':
+                value = target.options[target.selectedIndex].value
+               
+                break
+
             default: break
         }
-
         setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
     }
 
@@ -38,7 +48,7 @@ export function TodoFilter({ filterBy, onSetFilter }) {
         onSetFilterBy(filterByToEdit)
     }
 
-    const { txt, importance } = filterByToEdit
+    const { txt, importance ,taskFilter} = filterByToEdit
     return (
         <section className="todo-filter">
             <h2>Filter Todos</h2>
@@ -50,6 +60,17 @@ export function TodoFilter({ filterBy, onSetFilter }) {
                 <input value={importance} onChange={handleChange}
                     type="number" placeholder="By Importance" id="importance" name="importance"
                 />
+                 <br></br>
+                 <select value={taskFilter} name="taskFilter" onChange={handleChange}> 
+                    {options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                        {option.label}
+                        </option>
+                    ))}
+                </select>
+
+
+
 
                 <button hidden>Set Filter</button>
             </form>

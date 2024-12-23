@@ -83,8 +83,22 @@ export function TodoEdit() {
                 <input onChange={handleChange} value={isDone} type="checkbox" name="isDone" id="isDone" />
 
                 <label htmlFor="colorTodo" style={{backgroundColor:colorTodo}}>Task Color:</label>
-                <input onChange={handleChange} value={colorTodo} type="color"  name="colorTodo" id="colorTodo"  />
+                {/* <input onChange={handleChange} value={colorTodo} type="color"  name="colorTodo" id="colorTodo"  /> */}
+                <select onChange={handleChange} 
+                        value={colorTodo} 
+                        name="colorTodo" 
+                        id="colorTodo"
 
+                >
+                    <option value="#ffb3b3" style={{backgroundColor:"#ffb3b3"}}>Red</option>
+                    <option value="#b3ffb3" style={{backgroundColor:"#b3ffb3"}}>Green</option>
+                    <option value="#b3c6ff" style={{backgroundColor:"#b3c6ff"}}>Blue</option>
+                    <option value="#ffffb3" style={{backgroundColor:"#ffffb3"}}>Yellow</option>
+                    <option value="#e0b3ff" style={{backgroundColor:"#e0b3ff"}}>Purple</option>
+                    <option value="#b3ffff" style={{backgroundColor:"#b3ffff"}}>Cyan</option>
+                    <option value="#d9d9d9" style={{backgroundColor:"#d9d9d9"}}>Gray</option>
+                    <option value="#ffffff" style={{backgroundColor:"#ffffff"}}>White</option>
+                </select>
 
                 <button>Save</button>
             </form>
