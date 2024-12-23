@@ -13,6 +13,7 @@ export const todoService = {
     getDefaultFilter,
     getFilterFromSearchParams,
     getImportanceStats,
+    getStatusBar,
 }
 // For Debug (easy access from console):
 window.cs = todoService
@@ -20,6 +21,8 @@ window.cs = todoService
 function query(filterBy = {}) {
     return storageService.query(TODO_KEY)
         .then(todos => {
+            
+            const originLength = todos.length
             if (filterBy.txt) {
                 const regExp = new RegExp(filterBy.txt, 'i')
                 todos = todos.filter(todo => regExp.test(todo.txt))
@@ -35,9 +38,22 @@ function query(filterBy = {}) {
                     todos = todos.filter(todo => todo.isDone===true)
                 }
             }
-
+            
             return todos
         })
+}
+
+function getStatusBar(){
+    return storageService.query(TODO_KEY)
+        .then((todos)=> {
+            const completed= todos.filter(todo=>todo.isDone===true)
+            return( 
+                {
+                todoCompleted:completed.length,
+                todoLength:todos.length
+                }   
+            )}
+        )
 }
 
 function get(todoId) {

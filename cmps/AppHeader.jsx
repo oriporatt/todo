@@ -8,10 +8,18 @@ import { LoginSignup } from './LoginSignup.jsx'
 import { showErrorMsg } from '../services/event-bus.service.js'
 
 
+const { useSelector, useDispatch } = ReactRedux
+
+
+
 export function AppHeader() {
     const navigate = useNavigate()
     const [user, setUser] = useState(userService.getLoggedinUser())
-    
+    const todosStatusBar = useSelector(storeState => storeState.toDoModule.todosStatusBar)
+
+
+
+
     function onLogout() {
         userService.logout()
             .then(() => {
@@ -26,6 +34,8 @@ export function AppHeader() {
         setUser(user)
         navigate('/')
     }
+    
+    const isStatusBarDataExist= todosStatusBar.todoCompleted && todosStatusBar.todoLength
     return (
         <header className="app-header full main-layout">
             <section className="header-container">
@@ -41,6 +51,13 @@ export function AppHeader() {
                         <LoginSignup onSetUser={onSetUser} />
                     </section>
                 )}
+                <div className='status-bar'>
+                    {isStatusBarDataExist? 
+                        <span>Completed {todosStatusBar.todoCompleted}
+                        /{todosStatusBar.todoLength}</span> :
+                        <span>Loading Status Bar..</span>}
+                </div>
+
                 <nav className="app-nav">
                     <NavLink to="/" >Home</NavLink>
                     <NavLink to="/about" >About</NavLink>

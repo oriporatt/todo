@@ -1,7 +1,8 @@
 import { todoService } from "../../services/todo.service.js"
 import { store } from "../store.js"
 import {REMOVE_TODO, SET_IS_LOADING, 
-    SET_TODOS, UPDATE_TODO,ADD_TODOS } from "../reducers/todo.reducer.js"
+    SET_TODOS, UPDATE_TODO,
+    ADD_TODOS,SET_STATUS_BAR } from "../reducers/todo.reducer.js"
 
 export function loadTodos(){
     store.dispatch({type:SET_IS_LOADING, isLoading: true})
@@ -16,6 +17,7 @@ export function loadTodos(){
         })
         .finally(()=>{
             store.dispatch({type:SET_IS_LOADING, isLoading: false})
+            refreshStatusBar()
         })
 }
 
@@ -23,6 +25,7 @@ export function removeTodo(todoId){
     return todoService.remove(todoId)
     .then(()=>{
         store.dispatch({type:REMOVE_TODO, todoId})
+        refreshStatusBar()
     })
     .catch(err => {
         console.log('todo action -> Cannot remove todo', err)
@@ -53,12 +56,14 @@ export function toggleTodo(todo){
 
     return todoService.save(todoToSave)
         .then((savedTodo)=>{
+            refreshStatusBar()
             store.dispatch({type:UPDATE_TODO, todo:savedTodo})
         })
         .catch(err => {
             console.log('todo action -> Cannot toggle todo', err)
             throw err
         })
+
 }
 
 export function saveTodo(todo) {
@@ -66,10 +71,20 @@ export function saveTodo(todo) {
     return todoService.save(todo)
         .then((savedTodo) => {
             store.dispatch({ type, todo: savedTodo })
+            refreshStatusBar()
             return savedTodo
         })
         .catch(err => {
             console.log('todo action -> Cannot save todo', err)
             throw err
+        })
+        
+}
+
+export function refreshStatusBar(){
+    return todoService.getStatusBar()
+        .then((newStatus)=>{
+            store.dispatch({ type:SET_STATUS_BAR, todosStatusBar: newStatus })
+            return (newStatus)
         })
 }

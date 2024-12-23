@@ -53,14 +53,17 @@ export function TodoFilter({ filterBy, onSetFilter }) {
         <section className="todo-filter">
             <h2>Filter Todos</h2>
             <form onSubmit={onSubmitFilter}>
+                <label htmlFor="txt">Text: </label>
                 <input value={txt} onChange={handleChange}
                     type="search" placeholder="By Txt" id="txt" name="txt"
                 />
+                <br></br>
                 <label htmlFor="importance">Importance: </label>
                 <input value={importance} onChange={handleChange}
                     type="number" placeholder="By Importance" id="importance" name="importance"
                 />
                  <br></br>
+                 <label htmlFor="taskFilter">Show: </label>
                  <select value={taskFilter} name="taskFilter" onChange={handleChange}> 
                     {options.map((option) => (
                         <option key={option.value} value={option.value}>
