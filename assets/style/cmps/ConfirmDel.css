@@ -1,0 +1,13 @@
+.confirm-del{
+    position: fixed; /* Ensures the element stays fixed while scrolling */
+    top: 50%;        /* Positions the top edge at 50% of the viewport height */
+    left: 50%;       /* Positions the left edge at 50% of the viewport width */
+    transform: translate(-50%, -50%); /* Centers the element perfectly */
+    z-index: 9999;   /* Ensures it appears on top of other elements */
+    background: var(--clr1);
+    color: white;    /* Text color */
+    padding: 20px;
+    border: 2px solid white;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow for emphasis */
+}
