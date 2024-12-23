@@ -27,7 +27,6 @@ export function TodoEdit() {
                 setIsLoading(false); 
             })
             .catch(err => console.log('err:', err))
-            setIsLoading(false)
     }
 
     function handleChange({ target }) {
@@ -63,7 +62,6 @@ export function TodoEdit() {
                 console.log('err:', err)
             })
     }
-    console.log(isLoading)
     const { txt, importance, isDone } = todoToEdit
     if (isLoading && params.todoId){
         return <h1> Loading..</h1>

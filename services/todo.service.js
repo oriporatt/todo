@@ -45,7 +45,7 @@ function remove(todoId) {
     return storageService.remove(TODO_KEY, todoId)
 }
 
-function (todo) {
+function save(todo) {
     if (todo._id) {
         // TODO - updatable fields
         todo.updatedAt = Date.now()
