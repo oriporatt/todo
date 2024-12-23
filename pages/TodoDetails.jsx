@@ -57,8 +57,16 @@ export function TodoDetails() {
     const button_text= todo.isDone? "Mark Un-Do":"Mark as Done!"
     return (
         <section className="todo-details">
+            <button><Link to={`/todo/edit/${todo._id}`}>Edit Task</Link></button> 
             <h1 className={(todo.isDone)? 'done' : ''}>{todo.txt}</h1>
             <button onClick={()=>_toggleTodo(todo)}>{button_text}</button>
+            
+            {todo.colorTodo&&<h4>Task Color:<span style=
+                {{
+                    backgroundColor:todo.colorTodo,
+                    color:todo.colorTodo
+                }}>_Area with Color_</span></h4>}
+            
             <h1>Todo importance: {todo.importance}</h1>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim rem accusantium, itaque ut voluptates quo? Vitae animi maiores nisi, assumenda molestias odit provident quaerat accusamus, reprehenderit impedit, possimus est ad?</p>
             <button onClick={onBack}>Back to list</button>

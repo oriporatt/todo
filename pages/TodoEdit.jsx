@@ -42,7 +42,9 @@ export function TodoEdit() {
             case 'checkbox':
                 value = target.checked
                 break
-
+            case 'color': 
+                value = target.value 
+                break
             default:
                 break
         }
@@ -62,13 +64,14 @@ export function TodoEdit() {
                 console.log('err:', err)
             })
     }
-    const { txt, importance, isDone } = todoToEdit
+    const { txt, importance, isDone ,colorTodo} = todoToEdit
     if (isLoading && params.todoId){
         return <h1> Loading..</h1>
     }
+    
     return (
-   
-        <section className="todo-edit">
+        
+        <section className="todo-edit" >
             <form onSubmit={onSaveTodo} >
                 <label htmlFor="txt">Text:</label>
                 <input onChange={handleChange} value={txt} type="text" name="txt" id="txt" />
@@ -78,6 +81,10 @@ export function TodoEdit() {
 
                 <label htmlFor="isDone">isDone:</label>
                 <input onChange={handleChange} value={isDone} type="checkbox" name="isDone" id="isDone" />
+
+                <label htmlFor="colorTodo" style={{backgroundColor:colorTodo}}>Task Color:</label>
+                <input onChange={handleChange} value={colorTodo} type="color"  name="colorTodo" id="colorTodo"  />
+
 
                 <button>Save</button>
             </form>
