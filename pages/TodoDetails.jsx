@@ -1,5 +1,7 @@
 import { todoService } from "../services/todo.service.js"
-import { showErrorMsg } from "../services/event-bus.service.js"
+import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
+import { loadTodo,toggleTodo } from "../store/actions/todo.actions.js"
+
 
 const { useState, useEffect } = React
 const { useParams, useNavigate, Link } = ReactRouterDOM
@@ -11,18 +13,38 @@ export function TodoDetails() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        loadTodo()
+        _loadTodo()
+
     }, [params.todoId])
 
 
-    function loadTodo() {
-        todoService.get(params.todoId)
+    function _loadTodo() {
+        loadTodo(params.todoId)
             .then(setTodo)
             .catch(err => {
                 console.error('err:', err)
                 showErrorMsg('Cannot load todo')
                 navigate('/todo')
             })
+    }
+
+    function _toggleTodo(todo){
+        showSuccessMsg("Updating..")
+        toggleTodo(todo)
+        .then(()=>{
+            
+            loadTodo(todo._id)
+            .then((newToDo)=>{
+                setTodo(newToDo)
+                showSuccessMsg("Saved")
+            })
+            .catch(err => {
+                console.error('err:', err)
+                showErrorMsg('Cannot load todo')
+                navigate('/todo')
+            })
+        })
+
     }
 
     function onBack() {
@@ -32,11 +54,11 @@ export function TodoDetails() {
     }
 
     if (!todo) return <div>Loading...</div>
+    const button_text= todo.isDone? "Mark Un-Do":"Mark as Done!"
     return (
         <section className="todo-details">
             <h1 className={(todo.isDone)? 'done' : ''}>{todo.txt}</h1>
-            <h2>{(todo.isDone)? 'Done!' : 'In your list'}</h2>
-
+            <button onClick={()=>_toggleTodo(todo)}>{button_text}</button>
             <h1>Todo importance: {todo.importance}</h1>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim rem accusantium, itaque ut voluptates quo? Vitae animi maiores nisi, assumenda molestias odit provident quaerat accusamus, reprehenderit impedit, possimus est ad?</p>
             <button onClick={onBack}>Back to list</button>

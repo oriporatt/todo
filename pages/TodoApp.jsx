@@ -3,7 +3,7 @@ import { TodoList } from "../cmps/TodoList.jsx"
 import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-import { loadTodos,removeTodo } from "../store/actions/todo.actions.js"
+import { loadTodos,removeTodo ,toggleTodo} from "../store/actions/todo.actions.js"
 import {SET_FILTER_BY} from "../store/reducers/todo.reducer.js"
 import { ConfirmDel } from "../cmps/ConfirmDel.jsx"
 
@@ -47,16 +47,11 @@ export function TodoApp() {
     }
 
     function onToggleTodo(todo) {
-        const todoToSave = { ...todo, isDone: !todo.isDone }
-        todoService.save(todoToSave)
-            .then((savedTodo) => {
-                setTodos(prevTodos => prevTodos.map(currTodo => (currTodo._id !== todo._id) ? currTodo : { ...savedTodo }))
-                showSuccessMsg(`Todo is ${(savedTodo.isDone)? 'done' : 'back on your list'}`)
-            })
-            .catch(err => {
-                console.log('err:', err)
-                showErrorMsg('Cannot toggle todo ' + todoId)
-            })
+        toggleTodo(todo)
+            .then(()=>
+                showSuccessMsg(`Todo toggled`)
+            )
+
     }
 
     function onSetFilter(filterBy) {
@@ -66,9 +61,10 @@ export function TodoApp() {
     function onConfirmDel(todoId){
         setIdForDel(null)
         removeTodo(todoId)
-        .then(()=>showSuccessMsg('Todo Removed'))
-        .catch ((err)=>showErrorMsg('Cannot remover car'))
-
+            .then(()=>{
+                showSuccessMsg('Todo Removed')
+            }) 
+            .catch ((err)=>showErrorMsg('Cannot remover car'))
     }
 
     function onDelete(){
@@ -97,8 +93,7 @@ export function TodoApp() {
                         <DataTable todos={todos} onRemoveTodo={onRemoveTodo} />
                     </div>
                         {todoIdForDel && <ConfirmDel todoIdForDel={todoIdForDel} 
-                        onConfirmDel={onConfirmDel}
-                        onDelete={onDelete} />}
+                        onConfirmDel={onConfirmDel} onDelete={onDelete} />}
                     </div>
                 :<div>Loading</div>
             }

@@ -1,5 +1,6 @@
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
+import { saveTodo,loadTodo } from "../store/actions/todo.actions.js"
 
 const { useState, useEffect } = React
 const { useNavigate, useParams } = ReactRouterDOM
@@ -7,17 +8,26 @@ const { useNavigate, useParams } = ReactRouterDOM
 export function TodoEdit() {
 
     const [todoToEdit, setTodoToEdit] = useState(todoService.getEmptyTodo())
+    const [isLoading, setIsLoading] = useState(null)
+
     const navigate = useNavigate()
     const params = useParams()
 
     useEffect(() => {
-        if (params.todoId) loadTodo()
+        if (params.todoId){
+            _loadTodo()
+        } 
     }, [])
 
-    function loadTodo() {
-        todoService.get(params.todoId)
-            .then(setTodoToEdit)
+    function _loadTodo() {
+        setIsLoading(true)
+        loadTodo(params.todoId)
+            .then((todo) => {
+                setTodoToEdit(todo);
+                setIsLoading(false); 
+            })
             .catch(err => console.log('err:', err))
+            setIsLoading(false)
     }
 
     function handleChange({ target }) {
@@ -43,7 +53,7 @@ export function TodoEdit() {
 
     function onSaveTodo(ev) {
         ev.preventDefault()
-        todoService.save(todoToEdit)
+        saveTodo(todoToEdit)
             .then((savedTodo) => {
                 navigate('/todo')
                 showSuccessMsg(`Todo Saved (id: ${savedTodo._id})`)
@@ -53,10 +63,13 @@ export function TodoEdit() {
                 console.log('err:', err)
             })
     }
-
+    console.log(isLoading)
     const { txt, importance, isDone } = todoToEdit
-
+    if (isLoading && params.todoId){
+        return <h1> Loading..</h1>
+    }
     return (
+   
         <section className="todo-edit">
             <form onSubmit={onSaveTodo} >
                 <label htmlFor="txt">Text:</label>
@@ -67,7 +80,6 @@ export function TodoEdit() {
 
                 <label htmlFor="isDone">isDone:</label>
                 <input onChange={handleChange} value={isDone} type="checkbox" name="isDone" id="isDone" />
-
 
                 <button>Save</button>
             </form>
