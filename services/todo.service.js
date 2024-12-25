@@ -49,8 +49,8 @@ function getStatusBar(){
             const completed= todos.filter(todo=>todo.isDone===true)
             return( 
                 {
-                todoCompleted:completed.length,
-                todoLength:todos.length
+                todoCompleted:completed? completed.length:0,
+                todoLength:todos.length? todos.length:0
                 }   
             )}
         )

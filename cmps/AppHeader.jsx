@@ -35,7 +35,8 @@ export function AppHeader() {
         navigate('/')
     }
     
-    const isStatusBarDataExist= todosStatusBar.todoCompleted && todosStatusBar.todoLength
+    
+    const isStatusBarDataExist= (todosStatusBar.todoCompleted>=0) && (todosStatusBar.todoLength>=0)
     return (
         <header className="app-header full main-layout">
             <section className="header-container">
