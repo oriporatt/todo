@@ -3,6 +3,16 @@ import { store } from "../store.js"
 import {REMOVE_TODO, SET_IS_LOADING, 
     SET_TODOS, UPDATE_TODO,
     ADD_TODOS,SET_STATUS_BAR } from "../reducers/todo.reducer.js"
+import { INCREMENT } from "../reducers/user.reducer.js"
+import { update } from "../actions/user.actions.js"
+
+const { useSelector, useDispatch } = ReactRedux
+
+
+
+
+
+
 
 export function loadTodos(){
     store.dispatch({type:SET_IS_LOADING, isLoading: true})
@@ -58,6 +68,7 @@ export function toggleTodo(todo){
         .then((savedTodo)=>{
             refreshStatusBar()
             store.dispatch({type:UPDATE_TODO, todo:savedTodo})
+            return(savedTodo)
         })
         .catch(err => {
             console.log('todo action -> Cannot toggle todo', err)

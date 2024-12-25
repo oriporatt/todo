@@ -35,3 +35,14 @@ export function logout(){
             throw err
         })
 }
+
+export function update(user){
+    return userService.update(user)
+    .then(user=>{
+        store.dispatch({type:SET_USER, user: user})
+    })
+    .catch(err=>{
+        console.log('user actions>cant update',err)
+        throw err
+    })
+}

@@ -16,11 +16,10 @@ export function AppHeader() {
     const navigate = useNavigate()
     const todosStatusBar = useSelector(storeState => storeState.toDoModule.todosStatusBar)
     const user = useSelector(storeState => storeState.userModule.loggedInUser)
-    // const user = { username, password, fullname, score: 10000 }
 
 
 
-    
+
     function onLogout() {
         logout()
             .then(() => {
@@ -42,7 +41,7 @@ export function AppHeader() {
     }
 
     function onSignup(user) {
-        signup(user)
+        signup({...user,balance:10000})
             .then(() => { showSuccessMsg('Signed in successfully') })
             .catch((err) => { showErrorMsg('Oops try again') })
     }
@@ -58,6 +57,7 @@ export function AppHeader() {
 
                         <Link to={`/user/${user._id}`}>Hello {user.fullname}</Link>
                         <button onClick={onLogout}>Logout</button>
+                        <span>{user.balance}</span>
                     </ section >
                 ) : (
                     <section> 

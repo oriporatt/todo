@@ -6,6 +6,7 @@ import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { loadTodos,removeTodo ,toggleTodo} from "../store/actions/todo.actions.js"
 import {SET_FILTER_BY} from "../store/reducers/todo.reducer.js"
 import { ConfirmDel } from "../cmps/ConfirmDel.jsx"
+import {update} from "../store/actions/user.actions.js"
 
 const { useState, useEffect } = React
 const { useSelector, useDispatch } = ReactRedux
@@ -16,6 +17,8 @@ export function TodoApp() {
     const todos = useSelector(storeState => storeState.toDoModule.todos)
     const isLoading = useSelector(storeState => storeState.toDoModule.isLoading)
     const filterBy = useSelector(storeState => storeState.toDoModule.filterBy)
+    const user = useSelector(storeState => storeState.userModule.loggedInUser)
+
     const dispatch = useDispatch()
     const [todoIdForDel, setIdForDel] = useState(null)
     // Special hook for accessing search-params:
@@ -48,12 +51,19 @@ export function TodoApp() {
 
     function onToggleTodo(todo) {
         toggleTodo(todo)
-            .then(()=>
+            .then((newTodo)=>{
+                onComplete(newTodo)
                 showSuccessMsg(`Todo toggled`)
-            )
+            })
 
     }
 
+    function onComplete(todo){
+        if (todo.isDone){
+            update({...user,balance: user.balance+10})
+        }
+    }
+    
     function onSetFilter(filterBy) {
         dispatch({ type: SET_FILTER_BY, filterBy })
     }
