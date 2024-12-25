@@ -5,8 +5,8 @@ const { useNavigate } = ReactRouter
 import { userService } from '../services/user.service.js'
 import { UserMsg } from "./UserMsg.jsx"
 import { LoginSignup } from './LoginSignup.jsx'
-import { showErrorMsg } from '../services/event-bus.service.js'
-
+import { showErrorMsg,showSuccessMsg } from '../services/event-bus.service.js'
+import { login, logout, signup } from '../store/actions/user.actions.js'
 
 const { useSelector, useDispatch } = ReactRedux
 
@@ -14,25 +14,37 @@ const { useSelector, useDispatch } = ReactRedux
 
 export function AppHeader() {
     const navigate = useNavigate()
-    const [user, setUser] = useState(userService.getLoggedinUser())
     const todosStatusBar = useSelector(storeState => storeState.toDoModule.todosStatusBar)
+    const user = useSelector(storeState => storeState.userModule.loggedInUser)
+    // const user = { username, password, fullname, score: 10000 }
 
 
 
-
+    
     function onLogout() {
-        userService.logout()
+        logout()
             .then(() => {
-                onSetUser(null)
+                
             })
             .catch((err) => {
                 showErrorMsg('OOPs try again')
             })
     }
 
-    function onSetUser(user) {
-        setUser(user)
-        navigate('/')
+    function onLogin(user) {
+        login(user)
+            .then(() => { 
+                
+                showSuccessMsg('Logged in successfully') })
+            .catch((err) => {
+                showErrorMsg('Oops try again')
+             })
+    }
+
+    function onSignup(user) {
+        signup(user)
+            .then(() => { showSuccessMsg('Signed in successfully') })
+            .catch((err) => { showErrorMsg('Oops try again') })
     }
     
     
@@ -48,8 +60,8 @@ export function AppHeader() {
                         <button onClick={onLogout}>Logout</button>
                     </ section >
                 ) : (
-                    <section>
-                        <LoginSignup onSetUser={onSetUser} />
+                    <section> 
+                        <LoginSignup onLogin={onLogin} onSignup={onSignup} />
                     </section>
                 )}
                 <div className='status-bar'>

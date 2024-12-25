@@ -3,7 +3,7 @@ import { userService } from '../services/user.service.js'
 
 const { useState } = React
 
-export function LoginSignup({ onSetUser }) {
+export function LoginSignup({ onLogin, onSignup }) {
 
     const [isSignup, setIsSignUp] = useState(false)
     const [credentials, setCredentials] = useState(userService.getEmptyCredentials())
@@ -15,28 +15,23 @@ export function LoginSignup({ onSetUser }) {
 
     function handleSubmit(ev) {
         ev.preventDefault()
+        _onLogin(credentials)
+    }
+
+
+    function _onLogin(credentials) {
+        isSignup ? _signup(credentials) : _login(credentials)
+    }
+
+    function _login(credentials) {
         onLogin(credentials)
+
     }
 
-
-    function onLogin(credentials) {
-        isSignup ? signup(credentials) : login(credentials)
+    function _signup(credentials) {
+        onSignup(credentials)
     }
-
-    function login(credentials) {
-        userService.login(credentials)
-            .then(onSetUser)
-            .then(() => { showSuccessMsg('Logged in successfully') })
-            .catch((err) => { showErrorMsg('Oops try again') })
-    }
-
-    function signup(credentials) {
-        userService.signup(credentials)
-            .then(onSetUser)
-            .then(() => { showSuccessMsg('Signed in successfully') })
-            .catch((err) => { showErrorMsg('Oops try again') })
-    }
-
+    console.log(isSignup)
     return (
         <div className="login-page">
             <form className="login-form" onSubmit={handleSubmit}>

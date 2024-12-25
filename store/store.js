@@ -1,4 +1,6 @@
 import {todoReducer} from "./reducers/todo.reducer.js"
+import {userReducer} from "./reducers/user.reducer.js"
+
 
 const { createStore, combineReducers, compose } = Redux
 
@@ -6,7 +8,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const rootReducer = combineReducers({
     toDoModule: todoReducer,
-    // userModule: userReducer,
+    userModule: userReducer,
 })
 
 
