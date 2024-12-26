@@ -2,12 +2,15 @@
 const { useState, useEffect } = React
 const { useNavigate, useParams } = ReactRouterDOM
 const { useSelector, useDispatch } = ReactRedux
+import { SET_USER } from "../store/reducers/user.reducer.js"
+import { store } from "../store/store.js"
+import { showSuccessMsg } from "../services/event-bus.service.js"
 
 export function UserDetials() {
     const user = useSelector(storeState => storeState.userModule.loggedInUser)
 
     const [userEdit, setUserEdit] = useState(user)
-    const [isLoading, setIsLoading] = useState(null)
+    const dispatch = useDispatch()
 
     const navigate = useNavigate()
     const params = useParams()
@@ -35,21 +38,13 @@ export function UserDetials() {
             default:
                 break
         }
-
+        
         setUserEdit(prevUserToEdit => ({ ...prevUserToEdit, [field]: value }))
     }
 
     function onSaveUser(ev) {
         ev.preventDefault()
-        saveTodo(todoToEdit)
-            .then((savedTodo) => {
-                navigate('/todo')
-                showSuccessMsg(`Todo Saved (id: ${savedTodo._id})`)
-            })
-            .catch(err => {
-                showErrorMsg('Cannot save todo')
-                console.log('err:', err)
-            })
+        dispatch({ type: SET_USER, user:userEdit })
     }
     const { fullname, color, bgColor} = userEdit
     if (!userEdit){
@@ -103,6 +98,7 @@ export function UserDetials() {
 
                     
                 </select>
+                
 
                 <button>Save</button>
             </form>

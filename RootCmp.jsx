@@ -17,12 +17,13 @@ import { UserDetials } from "./pages/UserDetails.jsx"
 const { Provider } = ReactRedux
 
 
+
 export function RootCmp() {
 
     return (
         <Provider store={store}>
             <Router>
-                <section className="app main-layout">
+                <section className="app main-layout" >
                     <AppHeader />
                     <main>
                         <Routes>

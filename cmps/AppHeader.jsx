@@ -50,7 +50,14 @@ export function AppHeader() {
     refreshStatusBar()
     const isStatusBarDataExist= (todosStatusBar.todoCompleted>=0) && (todosStatusBar.todoLength>=0)
     return (
-        <header className="app-header full main-layout">
+        
+        <header className="app-header full main-layout"
+        style={{
+            backgroundColor: user&&user.bgColor? user.bgColor:'',
+            color: user&&user.color? user.color:'',
+          }} 
+        
+        >
             <section className="header-container">
                 <h1>React Todo App</h1>
                 {user ? (
