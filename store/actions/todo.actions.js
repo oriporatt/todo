@@ -3,7 +3,7 @@ import { store } from "../store.js"
 import {REMOVE_TODO, SET_IS_LOADING, 
     SET_TODOS, UPDATE_TODO,
     ADD_TODOS,SET_STATUS_BAR } from "../reducers/todo.reducer.js"
-import { INCREMENT } from "../reducers/user.reducer.js"
+import { ADD_ACTIVITY } from "../reducers/user.reducer.js"
 import { update } from "../actions/user.actions.js"
 
 const { useSelector, useDispatch } = ReactRedux
@@ -31,11 +31,12 @@ export function loadTodos(){
         })
 }
 
-export function removeTodo(todoId){
+export function removeTodo(todoId,todoTxt){
     return todoService.remove(todoId)
-    .then(()=>{
+    .then((todo)=>{
         store.dispatch({type:REMOVE_TODO, todoId})
         refreshStatusBar()
+        store.dispatch({type: ADD_ACTIVITY, txt:`Deleted Todo: ${todoTxt}`})
     })
     .catch(err => {
         console.log('todo action -> Cannot remove todo', err)
@@ -68,6 +69,8 @@ export function toggleTodo(todo){
         .then((savedTodo)=>{
             refreshStatusBar()
             store.dispatch({type:UPDATE_TODO, todo:savedTodo})
+            store.dispatch({type: ADD_ACTIVITY, txt:`Canged Todo status to ${savedTodo.isDone? 'Done':'Un-do'}. Todo: ${savedTodo.txt}`})
+
             return(savedTodo)
         })
         .catch(err => {
@@ -83,6 +86,8 @@ export function saveTodo(todo) {
         .then((savedTodo) => {
             store.dispatch({ type, todo: savedTodo })
             refreshStatusBar()
+            store.dispatch({type: ADD_ACTIVITY, txt:`${type===UPDATE_TODO? "Updated":"Saved"} Todo: ${savedTodo.txt}`})
+
             return savedTodo
         })
         .catch(err => {

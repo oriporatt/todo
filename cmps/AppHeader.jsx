@@ -9,6 +9,7 @@ import { showErrorMsg,showSuccessMsg } from '../services/event-bus.service.js'
 import { login, logout, signup } from '../store/actions/user.actions.js'
 
 const { useSelector, useDispatch } = ReactRedux
+import { refreshStatusBar } from "../store/actions/todo.actions.js"
 
 
 
@@ -46,7 +47,7 @@ export function AppHeader() {
             .catch((err) => { showErrorMsg('Oops try again') })
     }
     
-    
+    refreshStatusBar()
     const isStatusBarDataExist= (todosStatusBar.todoCompleted>=0) && (todosStatusBar.todoLength>=0)
     return (
         <header className="app-header full main-layout">

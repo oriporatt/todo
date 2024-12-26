@@ -7,6 +7,7 @@ import { loadTodos,removeTodo ,toggleTodo} from "../store/actions/todo.actions.j
 import {SET_FILTER_BY} from "../store/reducers/todo.reducer.js"
 import { ConfirmDel } from "../cmps/ConfirmDel.jsx"
 import {update} from "../store/actions/user.actions.js"
+import { Activities } from "../cmps/activities.jsx"
 
 const { useState, useEffect } = React
 const { useSelector, useDispatch } = ReactRedux
@@ -18,6 +19,7 @@ export function TodoApp() {
     const isLoading = useSelector(storeState => storeState.toDoModule.isLoading)
     const filterBy = useSelector(storeState => storeState.toDoModule.filterBy)
     const user = useSelector(storeState => storeState.userModule.loggedInUser)
+    const activities = useSelector(storeState => storeState.userModule.activities)
 
     const dispatch = useDispatch()
     const [todoIdForDel, setIdForDel] = useState(null)
@@ -26,7 +28,6 @@ export function TodoApp() {
 
 
     // const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
-
 
     useEffect(() => {
         // setSearchParams(filterBy)
@@ -70,7 +71,10 @@ export function TodoApp() {
 
     function onConfirmDel(todoId){
         setIdForDel(null)
-        removeTodo(todoId)
+        const thisTodo = todos.filter((todo)=>{
+            return (todo._id===todoId)
+        })
+        removeTodo(todoId,thisTodo[0].txt)
             .then(()=>{
                 showSuccessMsg('Todo Removed')
             }) 
@@ -102,9 +106,17 @@ export function TodoApp() {
                     <div style={{ width: '60%', margin: 'auto' }}>
                         <DataTable todos={todos} onRemoveTodo={onRemoveTodo} />
                     </div>
-                        {todoIdForDel && <ConfirmDel todoIdForDel={todoIdForDel} 
-                        onConfirmDel={onConfirmDel} onDelete={onDelete} />}
-                    </div>
+                        
+                    {todoIdForDel && <ConfirmDel todoIdForDel={todoIdForDel} 
+                    onConfirmDel={onConfirmDel} onDelete={onDelete} />}
+
+                    <div>
+                        <Activities activities={activities} />
+                    </div>    
+                </div>
+
+
+
                 :<div>Loading</div>
             }
 
