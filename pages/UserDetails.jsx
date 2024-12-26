@@ -1,30 +1,20 @@
 
 const { useState, useEffect } = React
 const { useNavigate, useParams } = ReactRouterDOM
+const { useSelector, useDispatch } = ReactRedux
 
 export function UserDetials() {
+    const user = useSelector(storeState => storeState.userModule.loggedInUser)
 
-    const [todoToEdit, setTodoToEdit] = useState(todoService.getEmptyTodo())
+    const [userEdit, setUserEdit] = useState(user)
     const [isLoading, setIsLoading] = useState(null)
 
     const navigate = useNavigate()
     const params = useParams()
 
     useEffect(() => {
-        if (params.todoId){
-            _loadTodo()
-        } 
-    }, [])
 
-    function _loadTodo() {
-        setIsLoading(true)
-        loadTodo(params.todoId)
-            .then((todo) => {
-                setTodoToEdit(todo);
-                setIsLoading(false); 
-            })
-            .catch(err => console.log('err:', err))
-    }
+        } , [])
 
     function handleChange({ target }) {
         const field = target.name
@@ -46,10 +36,10 @@ export function UserDetials() {
                 break
         }
 
-        setTodoToEdit(prevTodoToEdit => ({ ...prevTodoToEdit, [field]: value }))
+        setUserEdit(prevUserToEdit => ({ ...prevUserToEdit, [field]: value }))
     }
 
-    function onSaveTodo(ev) {
+    function onSaveUser(ev) {
         ev.preventDefault()
         saveTodo(todoToEdit)
             .then((savedTodo) => {
@@ -61,40 +51,57 @@ export function UserDetials() {
                 console.log('err:', err)
             })
     }
-    const { txt, importance, isDone ,colorTodo} = todoToEdit
-    if (isLoading && params.todoId){
+    const { fullname, color, bgColor} = userEdit
+    if (!userEdit){
         return <h1> Loading..</h1>
     }
     
     return (
         
-        <section className="todo-edit" >
-            <form onSubmit={onSaveTodo} >
-                <label htmlFor="txt">Text:</label>
-                <input onChange={handleChange} value={txt} type="text" name="txt" id="txt" />
-
-                <label htmlFor="importance">Importance:</label>
-                <input onChange={handleChange} value={importance} type="number" name="importance" id="importance" />
-
-                <label htmlFor="isDone">isDone:</label>
-                <input onChange={handleChange} value={isDone} type="checkbox" name="isDone" id="isDone" />
-
-                <label htmlFor="colorTodo" style={{backgroundColor:colorTodo}}>Task Color:</label>
-                {/* <input onChange={handleChange} value={colorTodo} type="color"  name="colorTodo" id="colorTodo"  /> */}
+        <section className="user-detials" >
+            <form onSubmit={onSaveUser} >
+                <label htmlFor="txt">Full Name:</label>
+                <input onChange={handleChange} value={fullname} type="text" name="fullname" id="fullname" />
+                <br></br>
+                <label htmlFor="color" style={{color:color}}>Color:</label>
                 <select onChange={handleChange} 
-                        value={colorTodo} 
-                        name="colorTodo" 
-                        id="colorTodo"
+                        value={color} 
+                        name="color" 
+                        id="color"
 
                 >
-                    <option value="#ffb3b3" style={{backgroundColor:"#ffb3b3"}}>Red</option>
-                    <option value="#b3ffb3" style={{backgroundColor:"#b3ffb3"}}>Green</option>
-                    <option value="#b3c6ff" style={{backgroundColor:"#b3c6ff"}}>Blue</option>
-                    <option value="#ffffb3" style={{backgroundColor:"#ffffb3"}}>Yellow</option>
-                    <option value="#e0b3ff" style={{backgroundColor:"#e0b3ff"}}>Purple</option>
-                    <option value="#b3ffff" style={{backgroundColor:"#b3ffff"}}>Cyan</option>
-                    <option value="#d9d9d9" style={{backgroundColor:"#d9d9d9"}}>Gray</option>
-                    <option value="#ffffff" style={{backgroundColor:"#ffffff"}}>White</option>
+                    <option value="#ffb3b3" style={{backgroundColor:"#ffb3b3"}}>red</option>
+                    <option value="#b3ffb3" style={{backgroundColor:"#b3ffb3"}}>green</option>
+                    <option value="#b3c6ff" style={{backgroundColor:"#b3c6ff"}}>blue</option>
+                    <option value="#ffffb3" style={{backgroundColor:"#ffffb3"}}>yellow</option>
+                    <option value="#e0b3ff" style={{backgroundColor:"#e0b3ff"}}>purple</option>
+                    <option value="#b3ffff" style={{backgroundColor:"#b3ffff"}}>cyan</option>
+                    <option value="#d9d9d9" style={{backgroundColor:"#d9d9d9"}}>gray</option>
+                    <option value="white" style={{backgroundColor:"white"}}>white</option>
+                    <option value= "black" style={{backgroundColor:"black", color:"white"} }>black</option>
+
+                    
+                </select>
+                <br></br>
+
+                <label htmlFor="bgColor" style={{backgroundColor:bgColor}}>bgColor:</label>
+                <select onChange={handleChange} 
+                        value={bgColor} 
+                        name="bgColor" 
+                        id="bgColor"
+
+                >
+                    <option value="#ffb3b3" style={{backgroundColor:"#ffb3b3"}}>red</option>
+                    <option value="#b3ffb3" style={{backgroundColor:"#b3ffb3"}}>green</option>
+                    <option value="#b3c6ff" style={{backgroundColor:"#b3c6ff"}}>blue</option>
+                    <option value="#ffffb3" style={{backgroundColor:"#ffffb3"}}>yellow</option>
+                    <option value="#e0b3ff" style={{backgroundColor:"#e0b3ff"}}>purple</option>
+                    <option value="#b3ffff" style={{backgroundColor:"#b3ffff"}}>cyan</option>
+                    <option value="#d9d9d9" style={{backgroundColor:"#d9d9d9"}}>gray</option>
+                    <option value="white" style={{backgroundColor:"white"}}>white</option>
+                    <option value= "black" style={{backgroundColor:"black", color:"white"} }>black</option>
+
+                    
                 </select>
 
                 <button>Save</button>
